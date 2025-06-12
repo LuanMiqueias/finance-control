@@ -24,17 +24,32 @@ model User {
 }
 
 model Transaction {
-  id          Int             @id @default(autoincrement())
+  id          String          @id @default(uuid())
   userId      String
   user        User            @relation(fields: [userId], references: [id])
   amount      Float
   type        TransactionType
   description String?
+  date        DateTime        @default(now())
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
+
+  isRecurring Boolean         @default(false)
+  recurrence  RecurrenceType?
+  repeatUntil DateTime?
+  parentId    String?
+  parent      Transaction?    @relation("RecurringParent", fields: [parentId], references: [id])
+  children    Transaction[]   @relation("RecurringParent")
 }
 
 enum TransactionType {
   INCOME
   EXPENSE
+}
+
+enum RecurrenceType {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
 }

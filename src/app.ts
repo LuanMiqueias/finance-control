@@ -8,6 +8,7 @@ import { ZodError } from "zod";
 // Env
 import { env } from "./env";
 import { userRoutes } from "./http/controllers/users/routes";
+import { transactionRoutes } from "./http/controllers/transactions/routes";
 
 // Routes
 
@@ -25,6 +26,7 @@ app.register(fastifyJwt, {
 });
 
 app.register(userRoutes);
+app.register(transactionRoutes);
 
 app.setErrorHandler((error, req, res) => {
 	if (error instanceof ZodError) {
